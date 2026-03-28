@@ -1,1 +1,45 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  font-family: 'Roboto Mono', monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Silkscreen', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  margin: 0;
+}
+
+.primary-button {
+  background-color: #fca311;
+  cursor: pointer;
+  padding: 5px 10px;
+
+  &:hover {
+    transform: translate(1px, -1px);
+  }
+}
+
+.section {
+  padding: 15px;
+  background-color: white;
+  box-shadow:
+    0 -3px 0 0 #2b2b2b,
+    0 3px 0 0 #2b2b2b,
+    -3px 0 0 0 #2b2b2b,
+    3px 0 0 0 #2b2b2b;
+
+  margin: 3px;
+}
+
+.bold {
+  font-weight: 900;
+}
