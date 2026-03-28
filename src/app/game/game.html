@@ -1,0 +1,124 @@
+<div class="game-page-wrapper">
+  <div class="heading section" *ngIf="selectedAlgorithm">
+    <h2>Mastering the Path: You vs. Machine</h2>
+    <p>
+      Visualize the logic behind the path. As you explore the maze, observe in real-time how the
+      <span class="bold">{{ selectedAlgorithm }}</span>
+      algorithm evaluates options and determines the most efficient route to the goal.
+    </p>
+  </div>
+  <div class="main-section-alt" *ngIf="!selectedAlgorithm">
+    <div class="choose-algorithm section">
+      <h3>Choose the Algorithm</h3>
+      <p>
+        A labyrinth is just a puzzle waiting for a solution. Select a logic path and watch the
+        machine navigate the unknown. The grid is ready. Are you?
+      </p>
+      <div class="buttons-wrapper">
+        <button class="primary-button" (click)="selectAlgorithm('A*')">A*</button>
+      </div>
+    </div>
+  </div>
+  <div class="main-section" *ngIf="selectedAlgorithm">
+    <div class="computer-maze section">
+      <h2>Computer</h2>
+      <app-maze
+        [mazeData]="mazeData"
+        [seeGenerateAnimation]="seeGenerateAnimation"
+        (animationInProgress)="handleStatus($event)"
+      ></app-maze>
+      <button class="primary-button" (click)="playAnimation()" [disabled]="animationInProgress">
+        Generate animation
+      </button>
+      <button class="primary-button" (click)="playAnimation()" [disabled]="animationInProgress">
+        Result animation
+      </button>
+    </div>
+    <div class="user-maze section">
+      <h2>You</h2>
+      <app-maze [mazeData]="mazeData"></app-maze>
+    </div>
+    <div class="learning-section section">
+      <div class="buttons-wrapper">
+        <button class="primary-button" (click)="selectLearningType('theory')">Theory</button>
+        <button class="primary-button" (click)="selectLearningType('tips')">Maze tips</button>
+        <button class="primary-button" (click)="selectAlgorithm(null)">Change algorithm</button>
+      </div>
+      <div *ngIf="selectedAlgorithm === 'A*'" class="one-alg">
+        <h2>A* algortihm</h2>
+        <div *ngIf="theoryOrTips === 'theory'" class="learning-item">
+          <p>
+            A* is an informed search algorithm, or a <span class="bold">heuristic</span> search.
+          </p>
+          <p>
+            The "intelligence" of A* comes from its cost function. For every node
+            <span class="bold">n</span> in the search space, A* calculates a total cost f(n):
+          </p>
+          <p><span class="bold">f(n) = g(n) + h(n)</span></p>
+          <p>The Components:</p>
+          <ul>
+            <li>
+              <span class="bold">g(n) (Actual Cost)</span>: This represents the exact cost of the
+              path from the starting node to the current node n. As the algorithm moves further from
+              the start, g(n) increases.
+            </li>
+            <li>
+              <span class="bold">h(n) (Heuristic Cost)</span>: This is the "estimated" cost from
+              node n to the goal. This is where the algorithm "guesses" the remaining distance.
+              Because it's a guess, we call it a heuristic.
+            </li>
+            <li>
+              <span class="bold">f(n) (Total Estimated Cost)</span>: This is the sum of both. A*
+              always chooses to expand the node with the lowest f(n) value first.
+            </li>
+          </ul>
+          <p>
+            For a 2D grid you can calculate h(n) with <span class="bold">Manhattan Distance:</span>
+          </p>
+          <p>h(n)=|x(goal)-x(n)|+|y(goal)-y(n)|</p>
+        </div>
+        <div *ngIf="theoryOrTips === 'tips'" class="learning-item">
+          <h4>How to Solve a Maze Using the A* Strategy</h4>
+
+          <p>
+            If you want to navigate the maze like the algorithm, follow this
+            <span class="bold">step-by-step logic</span> to find the shortest path:
+          </p>
+
+          <ul>
+            <li>
+              <span class="bold">1. Check your surroundings</span>: Look at all adjacent cells (up,
+              down, left, right) that aren't walls.
+            </li>
+            <li>
+              <span class="bold">2. Calculate the F-score</span>: For each cell, add the steps
+              you've already taken (<span class="bold">g</span>) to the estimated distance to the
+              exit (<span class="bold">h</span>).
+            </li>
+            <li>
+              <span class="bold">3. Use the Manhattan Rule</span>: To quickly guess the distance
+              (<span class="bold">h</span>), simply count how many squares horizontal and vertical
+              you are away from the red target.
+            </li>
+            <li>
+              <span class="bold">4. Pick the lowest value</span>: Always move to the square with the
+              smallest <span class="bold">f(n)</span>. This ensures you are always moving towards
+              the goal efficiently.
+            </li>
+            <li>
+              <span class="bold">5. Manage the "Open List"</span>: If you hit a dead end, go back to
+              the last junction where you had another "candidate" square with a low score and
+              continue from there.
+            </li>
+          </ul>
+
+          <p>
+            <span class="bold">Pro Tip:</span> A* is optimal because it never overestimates the
+            distance. It’s a perfect balance between <span class="bold">experience</span> (distance
+            covered) and <span class="bold">vision</span> (distance remaining).
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

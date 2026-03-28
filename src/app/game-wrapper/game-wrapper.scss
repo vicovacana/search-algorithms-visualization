@@ -3,5 +3,12 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100dvh;
+  height: 100%;
+  opacity: 0.9;
+  width: 100%;
+
+  .routing-container {
+    width: 100%;
+    height: 100%;
+  }
 }

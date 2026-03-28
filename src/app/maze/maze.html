@@ -1,0 +1,22 @@
+<div class="maze-wrapper">
+  <div *ngFor="let row of mazeData.grid; let x = index" class="row">
+    <div
+      *ngFor="let cell of row; let y = index"
+      class="block"
+      [ngClass]="{
+        'north-border': cell.walls.n,
+        'south-border': cell.walls.s,
+        'west-border': cell.walls.w,
+        'east-border': cell.walls.e,
+        'left-side': y === 0,
+        'right-side': y === row.length - 1,
+        'up-side': x === 0,
+        'down-side': x === row.length - 1,
+        'see-borders': animationGrid[x][y].visited === true,
+        'colored-cell': animationGrid[x][y].colored === true,
+        'end-node': startCell[0] === x && startCell[1] === y,
+        'start-node': endCell[0] === x && endCell[1] === y,
+      }"
+    ></div>
+  </div>
+</div>

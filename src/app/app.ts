@@ -4,7 +4,7 @@ import { GameWrapper } from './game-wrapper/game-wrapper';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, GameWrapper],
+  imports: [GameWrapper],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
