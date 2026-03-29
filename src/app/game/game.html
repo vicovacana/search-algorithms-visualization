@@ -37,7 +37,7 @@
           Result animation
         </button>
         <button class="primary-button" (click)="stopAnimation()" [disabled]="!animationInProgress">
-          Stop animation
+          Reset and stop animation
         </button>
       </div>
       <div class="desc">
@@ -50,7 +50,33 @@
     </div>
     <div class="user-maze section">
       <h2>You</h2>
-      <app-maze [mazeData]="mazeData" userOrComputer="user"></app-maze>
+      <app-maze
+        [mazeData]="mazeData"
+        userOrComputer="user"
+        [userCurrentField]="userCurrentStep"
+        [userHistory]="userHistory"
+        (cellClicked)="onCellClick($event)"
+      ></app-maze>
+      <div class="buttons-wrapper">
+        <button class="primary-button" (click)="clearUserMaze()">Reset</button>
+      </div>
+      <div class="instructions">
+        <div>
+          <svg-icon src="/arrow-left.svg"></svg-icon>
+        </div>
+        <div>
+          <svg-icon src="/arrow-right.svg"></svg-icon>
+        </div>
+        <div>
+          <svg-icon src="/arrow-up.svg"></svg-icon>
+        </div>
+        <div>
+          <svg-icon src="/arrow-down.svg"></svg-icon>
+        </div>
+        <div>
+          <svg-icon src="/click.svg" class="click"></svg-icon>
+        </div>
+      </div>
     </div>
     <div class="learning-section section">
       <div class="buttons-wrapper">

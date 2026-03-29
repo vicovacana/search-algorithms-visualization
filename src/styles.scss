@@ -43,3 +43,14 @@ h6 {
 .bold {
   font-weight: 900;
 }
+
+.retro-modal {
+  .mdc-dialog__surface {
+    border-radius: 0 !important;
+    box-shadow:
+      0 -3px 0 0 #2b2b2b,
+      0 3px 0 0 #2b2b2b,
+      -3px 0 0 0 #2b2b2b,
+      3px 0 0 0 #2b2b2b;
+  }
+}

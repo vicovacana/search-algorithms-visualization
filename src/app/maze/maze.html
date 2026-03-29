@@ -1,9 +1,11 @@
 <div class="maze-wrapper">
+  <h4>END</h4>
   <div *ngFor="let row of mazeData.grid; let x = index" class="row">
     <div
       *ngFor="let cell of row; let y = index"
       class="block"
       [ngClass]="{
+        user: userOrComputer === 'user',
         'north-border': cell.walls.n,
         'south-border': cell.walls.s,
         'west-border': cell.walls.w,
@@ -17,15 +19,17 @@
           generateAnimationGrid[x][y].colored === true || solveAnimationGrid[x][y].current === true,
         'end-node': startCell[0] === x && startCell[1] === y,
         'start-node': endCell[0] === x && endCell[1] === y,
-        'history-animation': solveAnimationGrid[x][y].history === true,
+        'history-animation': solveAnimationGrid[x][y].history === true || inHistory(x, y),
         'path-animation': solveAnimationGrid[x][y].path === true,
       }"
+      (click)="onCellClick(x, y)"
     >
       {{ solveAnimationGrid[x][y].path === true ? findPathIndex(x, y) : '' }}
       <img
         src="orange-cat.png"
-        *ngIf="userOrComputer === 'user' && startCell[0] === x && startCell[1] === y"
+        *ngIf="userOrComputer === 'user' && userCurrentField[0] === x && userCurrentField[1] === y"
       />
     </div>
   </div>
+  <h4>START</h4>
 </div>

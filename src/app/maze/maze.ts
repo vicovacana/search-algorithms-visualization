@@ -17,7 +17,10 @@ export class Maze {
   @Input() stopAnimations!: Subject<void>;
   @Input() userCurrentField!: Step;
   @Input() userOrComputer: 'user' | 'computer' = 'computer';
+  @Input() userHistory!: Step[];
+
   animationInProgress = output<boolean>();
+  cellClicked = output<Step>();
 
   generateAnimationGrid!: any[][];
   solveAnimationGrid!: any[][];
@@ -114,6 +117,7 @@ export class Maze {
 
   async playGenerateAnimation() {
     this.stopAnimationFlag = false;
+    this.animationInProgress.emit(true);
     this.generateAnimationGrid = this.generateAnimationGrid.map(() =>
       Array(this.generateAnimationGrid.length)
         .fill(null)
@@ -132,8 +136,6 @@ export class Maze {
           path: false,
         })),
     );
-
-    this.animationInProgress.emit(true);
 
     let prevX;
     let prevY;
@@ -241,6 +243,16 @@ export class Maze {
 
   findPathIndex(x: number, y: number) {
     return this.solution.path.findIndex((value) => value[0] === x && value[1] === y) + 1;
+  }
+
+  onCellClick(x: number, y: number) {
+    this.cellClicked.emit([x, y]);
+  }
+
+  inHistory(x: number, y: number) {
+    if (!this.userHistory) return false;
+
+    return this.userHistory.some((step) => step[0] === x && step[1] === y);
   }
 
   ngOnDestroy() {

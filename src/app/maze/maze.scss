@@ -1,6 +1,7 @@
 .maze-wrapper {
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin: 2px;
 
   .row {
@@ -19,6 +20,13 @@
 
       img {
         height: 70%;
+      }
+
+      &.user {
+        &:hover {
+          background-color: #e0e0e0;
+          cursor: pointer;
+        }
       }
 
       &.history-animation {
