@@ -26,17 +26,31 @@
         [mazeData]="mazeData"
         [seeGenerateAnimation]="seeGenerateAnimation"
         (animationInProgress)="handleStatus($event)"
+        [seeSolutionAnimation]="seeSolutionAnimation"
+        [stopAnimations]="stopAnimations"
       ></app-maze>
-      <button class="primary-button" (click)="playAnimation()" [disabled]="animationInProgress">
-        Generate animation
-      </button>
-      <button class="primary-button" (click)="playAnimation()" [disabled]="animationInProgress">
-        Result animation
-      </button>
+      <div class="buttons-wrapper">
+        <button class="primary-button" (click)="playAnimation()" [disabled]="animationInProgress">
+          Generate animation
+        </button>
+        <button class="primary-button" (click)="solveMaze()" [disabled]="animationInProgress">
+          Result animation
+        </button>
+        <button class="primary-button" (click)="stopAnimation()" [disabled]="!animationInProgress">
+          Stop animation
+        </button>
+      </div>
+      <div class="desc">
+        <p>
+          Generated with DFS with randomly collapsed walls. This algorithm 'dives deep' into one
+          direction before backtracking to create new paths. Play the animations below to visualize
+          how this intricate maze was crafted step by step.
+        </p>
+      </div>
     </div>
     <div class="user-maze section">
       <h2>You</h2>
-      <app-maze [mazeData]="mazeData"></app-maze>
+      <app-maze [mazeData]="mazeData" userOrComputer="user"></app-maze>
     </div>
     <div class="learning-section section">
       <div class="buttons-wrapper">

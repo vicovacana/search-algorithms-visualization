@@ -12,11 +12,20 @@
         'right-side': y === row.length - 1,
         'up-side': x === 0,
         'down-side': x === row.length - 1,
-        'see-borders': animationGrid[x][y].visited === true,
-        'colored-cell': animationGrid[x][y].colored === true,
+        'see-borders': generateAnimationGrid[x][y].visited === true,
+        'colored-cell':
+          generateAnimationGrid[x][y].colored === true || solveAnimationGrid[x][y].current === true,
         'end-node': startCell[0] === x && startCell[1] === y,
         'start-node': endCell[0] === x && endCell[1] === y,
+        'history-animation': solveAnimationGrid[x][y].history === true,
+        'path-animation': solveAnimationGrid[x][y].path === true,
       }"
-    ></div>
+    >
+      {{ solveAnimationGrid[x][y].path === true ? findPathIndex(x, y) : '' }}
+      <img
+        src="orange-cat.png"
+        *ngIf="userOrComputer === 'user' && startCell[0] === x && startCell[1] === y"
+      />
+    </div>
   </div>
 </div>
