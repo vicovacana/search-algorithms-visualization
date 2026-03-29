@@ -17,7 +17,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
   styleUrl: './game.scss',
 })
 export class Game {
-  selectedAlgorithm: 'A*' | null = null;
+  selectedAlgorithm: 'A*' | 'BFS' | null = null;
   theoryOrTips: 'theory' | 'tips' = 'theory';
   mazeData!: MazeData;
   seeGenerateAnimation: Subject<boolean> = new Subject<boolean>();
@@ -31,11 +31,14 @@ export class Game {
 
   algorithmsMap = {
     'A*': 'a-star',
+    BFS: 'bfs',
   };
 
   solution!: Solution;
   userHistory: Step[] = [];
   userCurrentStep!: Step;
+
+  serverIsDown: boolean = false;
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
@@ -100,7 +103,7 @@ export class Game {
     this.getMaze();
   }
 
-  selectAlgorithm(selected: 'A*' | null) {
+  selectAlgorithm(selected: 'A*' | 'BFS' | null) {
     this.selectedAlgorithm = selected;
   }
 
@@ -125,6 +128,7 @@ export class Game {
       },
       (error) => {
         console.log(error);
+        this.serverIsDown = true;
       },
     );
   }
