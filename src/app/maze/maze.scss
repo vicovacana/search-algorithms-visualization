@@ -1,6 +1,7 @@
 .maze-wrapper {
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin: 2px;
 
   .row {
@@ -12,6 +13,29 @@
       background-color: #fff;
       border: 2px solid #ddd;
       aspect-ratio: 1 / 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #398406;
+
+      img {
+        height: 70%;
+      }
+
+      &.user {
+        &:hover {
+          background-color: #e0e0e0;
+          cursor: pointer;
+        }
+      }
+
+      &.history-animation {
+        background-color: #d9a5a5;
+      }
+
+      &.path-animation {
+        background-color: #ace984;
+      }
 
       &.colored-cell {
         background-color: #e0e0e0;

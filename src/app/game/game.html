@@ -1,5 +1,5 @@
 <div class="game-page-wrapper">
-  <div class="heading section" *ngIf="selectedAlgorithm">
+  <div class="heading section" *ngIf="selectedAlgorithm && !serverIsDown">
     <h2>Mastering the Path: You vs. Machine</h2>
     <p>
       Visualize the logic behind the path. As you explore the maze, observe in real-time how the
@@ -7,7 +7,7 @@
       algorithm evaluates options and determines the most efficient route to the goal.
     </p>
   </div>
-  <div class="main-section-alt" *ngIf="!selectedAlgorithm">
+  <div class="main-section-alt" *ngIf="!selectedAlgorithm && !serverIsDown">
     <div class="choose-algorithm section">
       <h3>Choose the Algorithm</h3>
       <p>
@@ -16,27 +16,68 @@
       </p>
       <div class="buttons-wrapper">
         <button class="primary-button" (click)="selectAlgorithm('A*')">A*</button>
+        <button class="primary-button" (click)="selectAlgorithm('BFS')">BFS</button>
       </div>
     </div>
   </div>
-  <div class="main-section" *ngIf="selectedAlgorithm">
+  <div class="main-section" *ngIf="selectedAlgorithm && !serverIsDown">
     <div class="computer-maze section">
       <h2>Computer</h2>
       <app-maze
         [mazeData]="mazeData"
         [seeGenerateAnimation]="seeGenerateAnimation"
         (animationInProgress)="handleStatus($event)"
+        [seeSolutionAnimation]="seeSolutionAnimation"
+        [stopAnimations]="stopAnimations"
       ></app-maze>
-      <button class="primary-button" (click)="playAnimation()" [disabled]="animationInProgress">
-        Generate animation
-      </button>
-      <button class="primary-button" (click)="playAnimation()" [disabled]="animationInProgress">
-        Result animation
-      </button>
+      <div class="buttons-wrapper">
+        <button class="primary-button" (click)="playAnimation()" [disabled]="animationInProgress">
+          Generate animation
+        </button>
+        <button class="primary-button" (click)="solveMaze()" [disabled]="animationInProgress">
+          Result animation
+        </button>
+        <button class="primary-button" (click)="stopAnimation()" [disabled]="!animationInProgress">
+          Reset and stop animation
+        </button>
+      </div>
+      <div class="desc">
+        <p>
+          Generated with DFS with randomly collapsed walls. This algorithm 'dives deep' into one
+          direction before backtracking to create new paths. Play the animations below to visualize
+          how this intricate maze was crafted step by step.
+        </p>
+      </div>
     </div>
     <div class="user-maze section">
       <h2>You</h2>
-      <app-maze [mazeData]="mazeData"></app-maze>
+      <app-maze
+        [mazeData]="mazeData"
+        userOrComputer="user"
+        [userCurrentField]="userCurrentStep"
+        [userHistory]="userHistory"
+        (cellClicked)="onCellClick($event)"
+      ></app-maze>
+      <div class="buttons-wrapper">
+        <button class="primary-button" (click)="clearUserMaze()">Reset</button>
+      </div>
+      <div class="instructions">
+        <div>
+          <svg-icon src="/arrow-left.svg"></svg-icon>
+        </div>
+        <div>
+          <svg-icon src="/arrow-right.svg"></svg-icon>
+        </div>
+        <div>
+          <svg-icon src="/arrow-up.svg"></svg-icon>
+        </div>
+        <div>
+          <svg-icon src="/arrow-down.svg"></svg-icon>
+        </div>
+        <div>
+          <svg-icon src="/click.svg" class="click"></svg-icon>
+        </div>
+      </div>
     </div>
     <div class="learning-section section">
       <div class="buttons-wrapper">
@@ -119,6 +160,86 @@
           </p>
         </div>
       </div>
+      <div *ngIf="selectedAlgorithm === 'BFS'" class="one-alg">
+        <h2>Breadth-First Search (BFS)</h2>
+
+        <div *ngIf="theoryOrTips === 'theory'" class="learning-item">
+          <p>
+            BFS is an <span class="bold">uninformed</span> or "blind" search algorithm. Unlike A*,
+            it has no heuristic to guide it towards the goal.
+          </p>
+          <p>
+            The core mechanism of BFS is that it explores the search space
+            <span class="bold">level by level</span>. It visits all direct neighbors of the starting
+            node first, then all their neighbors, and so on.
+          </p>
+          <p>The Components:</p>
+          <ul>
+            <li>
+              <span class="bold">Queue (FIFO)</span>: BFS relies on a First-In-First-Out data
+              structure. Nodes discovered first are explored first. This guarantees that paths are
+              checked in order of their length.
+            </li>
+            <li>
+              <span class="bold">Visited Set</span>: To avoid infinite loops, BFS keeps track of
+              every node it has already explored so it never visits the same cell twice.
+            </li>
+            <li>
+              <span class="bold">The Wave Effect</span>: Because of how the Queue works, the
+              algorithm spreads outwards from the starting point equally in all directions, much
+              like a ripple in a pond.
+            </li>
+          </ul>
+          <p>
+            <span class="bold">Shortest Path Guarantee:</span> In an unweighted grid (where every
+            step costs 1, like our maze), BFS is <span class="bold">guaranteed</span> to find the
+            shortest possible path to the goal.
+          </p>
+        </div>
+
+        <div *ngIf="theoryOrTips === 'tips'" class="learning-item">
+          <h4>How to Solve a Maze Using the BFS Strategy</h4>
+
+          <p>
+            If you want to navigate the maze like a BFS algorithm, follow this
+            <span class="bold">step-by-step logic</span>:
+          </p>
+
+          <ul>
+            <li>
+              <span class="bold">1. Check your surroundings</span>: Identify every valid move (up,
+              down, left, right) from your current position.
+            </li>
+            <li>
+              <span class="bold">2. Take one step everywhere</span>: Imagine you can split yourself
+              into multiple clones. Send one clone into every available adjacent square
+              simultaneously.
+            </li>
+            <li>
+              <span class="bold">3. Wait for all clones</span>: Do not let any single clone take a
+              second step until every other clone has taken their first step.
+            </li>
+            <li>
+              <span class="bold">4. Expand the perimeter</span>: Now, let every clone take exactly
+              one more step into a new, unvisited square. Repeat this process level by level.
+            </li>
+            <li>
+              <span class="bold">5. First to the finish line</span>: Because all paths are explored
+              at the exact same pace, the very first "clone" that touches the goal has
+              mathematically found the shortest route.
+            </li>
+          </ul>
+
+          <p>
+            <span class="bold">Pro Tip:</span> BFS is reliable but
+            <span class="bold">memory-heavy</span>. Because it explores everywhere equally instead
+            of moving toward a specific target, it can be very slow in large, open spaces.
+          </p>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="server-down" *ngIf="selectedAlgorithm && serverIsDown">
+    <h3>Server is currently down. Try again later</h3>
   </div>
 </div>
